@@ -1,89 +1,94 @@
-let plantas = JSON.parse(localStorage.getItem("plantas")) || [];
+// Banco de dados de dicas sustentáveis
+const dicasSustentaveis = [
+    "Dica: Use água da chuva captada para regar esta planta. Reduz o consumo de água potável!",
+    "Dica: Use cascas de ovo trituradas na terra para adicionar cálcio naturalmente.",
+    "Dica: Pratique a compostagem! Restos de vegetais viram um excelente adubo orgânico.",
+    "Dica: Faça cobertura morta (folhas secas) na terra para manter a umidade por mais tempo."
+];
 
-// Salva no navegador
-function salvar() {
-    localStorage.setItem("plantas", JSON.stringify(plantas));
+const plantForm = document.getElementById('plant-form');
+const plantsContainer = document.getElementById('plants-container');
+
+// Carregar plantas salvas ao abrir o app
+let plantas = JSON.parse(localStorage.getItem('plantas')) || [];
+
+function salvarNoLocalStorage() {
+    localStorage.setItem('plantas', JSON.stringify(plantas));
 }
 
-// Adiciona planta nova
-function adicionarPlanta() {
-    const nome = document.getElementById("nomePlanta").value.trim();
-    const dias = document.getElementById("diasRegar").value.trim();
-
-    if (nome === "" || dias === "" || isNaN(dias) || dias <= 0) {
-        alert("Preencha corretamente o nome e os dias de rega!");
-        return;
-    }
-
-    const hoje = new Date().toISOString().split("T")[0];
-
-    plantas.push({
-        nome: nome,
-        dias: parseInt(dias),
-        ultimaRegada: hoje
-    });
-
-    salvar();
-    mostrarPlantas();
-    document.getElementById("nomePlanta").value = "";
-    document.getElementById("diasRegar").value = "";
+// Função para gerar uma dica aleatória
+function obterDicaAleatoria() {
+    const totalDicas = dicasSustentaveis.length;
+    const indiceAleatorio = Math.floor(Math.random() * totalDicas);
+    return dicasSustentaveis[indiceAleatorio];
 }
 
-// Verifica se a planta precisa regar
-function precisaRegar(planta) {
-    const hoje = new Date();
-    const ultima = new Date(planta.ultimaRegada);
-    const diff = Math.floor((hoje - ultima) / (1000 * 60 * 60 * 24));
-    return diff >= planta.dias;
-}
+// Função para renderizar as plantas na tela
+function renderizarPlantas() {
+    plantsContainer.innerHTML = '';
 
-// Regar planta
-function regar(index) {
-    plantas[index].ultimaRegada = new Date().toISOString().split("T")[0];
-    salvar();
-    mostrarPlantas();
-    alert(`💧 Você regou a planta "${plantas[index].nome}"!`);
-}
+    plantas.forEach((planta, index) => {
+        const card = document.createElement('div');
+        card.classList.add('plant-card');
 
-// Mostrar todas as plantas
-function mostrarPlantas() {
-    const lista = document.getElementById("lista");
-    lista.innerHTML = "";
+        // Lógica simples de alerta simulado baseado no tempo
+        // Se passou do intervalo, gera o alerta
+        const horasPassadas = (Date.now() - planta.dataPlantio) / (1000 * 60 * 60); 
+        const precisaAgua = horasPassadas >= (planta.intervalo * 24); // Simulação real
 
-    if (plantas.length === 0) {
-        lista.innerHTML = "<p>Nenhuma planta cadastrada ainda.</p>";
-        return;
-    }
-
-    plantas.forEach((planta, i) => {
-        const div = document.createElement("div");
-        div.classList.add("planta");
-
-        if (precisaRegar(planta)) {
-            div.classList.add("alerta");
-        } else {
-            div.classList.add("ok");
+        // Para fins de teste rápido no protótipo, você pode simular que sempre precisa após alguns segundos
+        if (precisaAgua) {
+            card.classList.add('alert');
         }
 
-        // Calcula dias restantes para rega
-        const hoje = new Date();
-        const ultima = new Date(planta.ultimaRegada);
-        const diff = Math.floor((hoje - ultima) / (1000 * 60 * 60 * 24));
-        const diasRestantes = planta.dias - diff;
-        const aviso = diasRestantes <= 0 ? "Regar agora!" : `Faltam ${diasRestantes} dias`;
-
-        div.innerHTML = `
-            <div>
-                <strong>${planta.nome}</strong><br>
-                Intervalo de rega: ${planta.dias} dias<br>
-                <em>${aviso}</em>
-            </div>
-            <button onclick="regar(${i})">💧 Regar</button>
+        card.innerHTML = `
+            <h3>${planta.nome}</h3>
+            <p><strong>Rega:</strong> a cada ${planta.intervalo} dia(s)</p>
+            <p class="status">${precisaAgua ? '⚠️ NECESSITA DE ÁGUA AGORA!' : '💧 Solo hidratado'}</p>
+            <div class="tip">${planta.dica}</div>
+            <button onclick="regarPlanta(${index})" style="margin-top: 10px; background: #2e7d32;">Regar Planta</button>
+            <button onclick="removerPlanta(${index})" style="margin-top: 10px; background: #c62828;">Remover</button>
         `;
 
-        lista.appendChild(div);
+        plantsContainer.appendChild(card);
     });
 }
 
-// Inicializa
-mostrarPlantas();
+// Evento de envio do formulário
+plantForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById('plant-name').value;
+    const intervalo = document.getElementById('water-interval').value;
+
+    const novaPlanta = {
+        nome: nome,
+        intervalo: parseInt(intervalo),
+        dataPlantio: Date.now(), // Guarda o momento exato do registro
+        dica: obterDicaAleatoria()
+    };
+
+    plantas.push(novaPlanta);
+    salvarNoLocalStorage();
+    renderizarPlantas();
+
+    plantForm.reset(); // Limpa os campos do formulário
+});
+
+// Função para resetar o temporizador de rega
+window.regarPlanta = function(index) {
+    plantas[index].dataPlantio = Date.now(); // Reseta o tempo para agora
+    salvarNoLocalStorage();
+    renderizarPlantas();
+    alert(`Você regou a planta: ${plantas[index].nome}!`);
+};
+
+// Função para deletar uma planta
+window.removerPlanta = function(index) {
+    plantas.splice(index, 1);
+    salvarNoLocalStorage();
+    renderizarPlantas();
+};
+
+// Inicializa a tela com os dados salvos
+renderizarPlantas();

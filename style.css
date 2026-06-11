@@ -1,80 +1,92 @@
-body{
-    font-family: Arial;
-    background: linear-gradient(135deg,#4CAF50,#8BC34A);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container{
-    width:90%;
-    max-width:600px;
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 0 15px rgba(0,0,0,0.2);
+body {
+    background-color: #f4f7f5;
+    color: #333;
 }
 
-h1{
-    text-align:center;
-    color:#2E7D32;
+header {
+    background-color: #2e7d32;
+    color: white;
+    text-align: center;
+    padding: 2rem;
 }
 
-.sub{
-    text-align:center;
-    color:#666;
-    margin-bottom:20px;
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.card{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    margin-bottom:20px;
+section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-input{
-    padding:10px;
-    border:1px solid #ccc;
-    border-radius:8px;
+form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-button{
-    padding:10px;
-    border:none;
-    border-radius:8px;
-    background:#2E7D32;
-    color:white;
-    cursor:pointer;
+input, select, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
 }
 
-button:hover{
-    background:#1B5E20;
+input { flex: 2; min-width: 200px; }
+select { flex: 1; min-width: 150px; }
+
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
 }
 
-.planta{
-    background:#E8F5E9;
-    padding:10px;
-    margin:10px 0;
-    border-radius:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+button:hover { background-color: #45a049; }
+
+/* Grid de Cards de Plantas */
+.plants-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
 }
 
-.alerta{
-    background:#FFCDD2;
+.plant-card {
+    background: #e8f5e9;
+    border-left: 5px solid #2e7d32;
+    padding: 1rem;
+    border-radius: 4px;
+    position: relative;
 }
 
-.ok{
-    background:#C8E6C9;
+.plant-card h3 { color: #1b5e20; margin-bottom: 5px; }
+
+.alert {
+    background-color: #ffebee;
+    color: #c62828;
+    border-left-color: #c62828;
 }
 
-.dica{
-    margin-top:20px;
-    padding:10px;
-    background:#E3F2FD;
-    border-radius:10px;
-    font-size:14px;
+.tip {
+    font-size: 0.85rem;
+    color: #555;
+    background: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border-left: 3px solid #81c784;
 }

@@ -2,32 +2,38 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>PlantCare Agro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioMonitor - App de Plantas</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <h1>🌱 BioMonitor</h1>
+        <p>Acompanhe suas culturas de forma sustentável</p>
+    </header>
 
-<div class="container">
-    <h1>🌱 PlantCare Agro</h1>
-    <p class="sub">Monitore suas plantas e cuide da sustentabilidade</p>
+    <main class="container">
+        <section class="form-section">
+            <h2>Registrar Novo Plantio</h2>
+            <form id="plant-form">
+                <input type="text" id="plant-name" placeholder="Nome da Planta (ex: Tomate)" required>
+                <select id="water-interval" required>
+                    <option value="">Frequência de Rega</option>
+                    <option value="1">Todo dia</option>
+                    <option value="2">A cada 2 dias</option>
+                    <option value="3">A cada 3 dias</option>
+                </select>
+                <button type="submit">Adicionar Planta</button>
+            </form>
+        </section>
 
-    <!-- Formulário -->
-    <div class="card">
-        <input type="text" id="nomePlanta" placeholder="Nome da planta">
-        <input type="number" id="diasRegar" placeholder="Regar a cada quantos dias?">
-        <button onclick="adicionarPlanta()">Adicionar Planta</button>
-    </div>
+        <section class="list-section">
+            <h2>Suas Plantas</h2>
+            <div id="plants-container" class="plants-grid">
+                </div>
+        </section>
+    </main>
 
-    <!-- Lista -->
-    <h2>🌿 Suas Plantas</h2>
-    <div id="lista"></div>
-
-    <!-- Dica -->
-    <div class="dica">
-        💡 Dica: Regar corretamente evita desperdício de água e melhora a produção sustentável!
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
