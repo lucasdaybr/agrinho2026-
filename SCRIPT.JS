@@ -1,173 +1,72 @@
-const perguntas = [
-    {
-        pergunta: "Qual prática ajuda a conservar o solo?",
-        respostas: ["Desmatamento", "Rotação de culturas", "Queimadas"],
-        correta: 1,
-        explicacao: "A rotação de culturas mantém os nutrientes do solo e reduz pragas.",
-        imagem: "imagens/solo.jpg"
-    },
-    {
-        pergunta: "Qual fonte de energia é sustentável no campo?",
-        respostas: ["Carvão", "Diesel", "Energia solar"],
-        correta: 2,
-        explicacao: "A energia solar é limpa, renovável e não polui.",
-        imagem: "imagens/solar.jpg"
-    },
-    {
-        pergunta: "Por que economizar água na agricultura é importante?",
-        respostas: ["Para preservar recursos naturais", "Para gastar mais", "Não faz diferença"],
-        correta: 0,
-        explicacao: "A água é essencial e precisa ser usada de forma consciente.",
-        imagem: "imagens/agua.jpg"
-    },
-    {
-        pergunta: "O que ajuda a proteger a biodiversidade?",
-        respostas: ["Desmatamento", "Preservação de áreas verdes", "Poluição dos rios"],
-        correta: 1,
-        explicacao: "Áreas verdes preservadas protegem plantas, animais e ecossistemas.",
-        imagem: "imagens/biodiversidade.jpg"
-    }
-];
+let plantas = JSON.parse(localStorage.getItem("plantas")) || [];
 
-let indice = 0;
-let pontos = 0;
+function salvar(){
+    localStorage.setItem("plantas", JSON.stringify(plantas));
+}
 
-const perguntaEl = document.getElementById("pergunta");
-const respostasEl = document.getElementById("respostas");
-const proximaBtn = document.getElementById("proxima");
-const explicacaoEl = document.getElementById("explicacao");
-const progressoEl = document.getElementById("progresso");
-const imagemEl = document.getElementById("imagem-pergunta");
-const mascoteEl = document.getElementById("imagem-mascote");
+function adicionarPlanta(){
+    const nome = document.getElementById("nomePlanta").value;
+    const dias = document.getElementById("diasRegar").value;
 
-function carregarPergunta(){
-    respostasEl.innerHTML = "";
-    explicacaoEl.textContent = "";
-    perguntaEl.textContent = perguntas[indice].pergunta;
-
-    // Imagem da pergunta
-    if(perguntas[indice].imagem){
-        imagemEl.src = perguntas[indice].imagem;
-        imagemEl.classList.remove("oculto");
-    } else{
-        imagemEl.classList.add("oculto");
+    if(nome === "" || dias === ""){
+        alert("Preencha todos os campos!");
+        return;
     }
 
-    perguntas[indice].respostas.forEach((resp,i)=>{
-        const botao = document.createElement("button");
-        botao.textContent = resp;
-        botao.classList.add("resposta");
-        botao.onclick = ()=> verificarResposta(i, botao);
-        respostasEl.appendChild(botao);
+    const hoje = new Date().toISOString().split("T")[0];
+
+    plantas.push({
+        nome: nome,
+        dias: parseInt(dias),
+        ultimaRegada: hoje
     });
 
-    // Atualiza barra de progresso
-    progressoEl.style.width = (indice / perguntas.length) * 100 + "%";
+    salvar();
+    mostrarPlantas();
+
+    document.getElementById("nomePlanta").value = "";
+    document.getElementById("diasRegar").value = "";
 }
 
-function verificarResposta(escolha, botao){
-    const botoes = document.querySelectorAll(".resposta");
-    botoes.forEach(b => b.disabled = true);
+function precisaRegar(planta){
+    const hoje = new Date();
+    const ultima = new Date(planta.ultimaRegada);
 
-    if(escolha === perguntas[indice].correta){
-        pontos++;
-        botao.classList.add("acerto");
-        explicacaoEl.textContent = "✅ Correto! " + perguntas[indice].explicacao;
-        mascoteEl.style.transform = "scale(1.2)";
-        document.getElementById("som-certo").play();
-    } else{
-        botao.classList.add("erro");
-        botoes[perguntas[indice].correta].classList.add("acerto");
-        explicacaoEl.textContent = "❌ Errado. " + perguntas[indice].explicacao;
-        mascoteEl.style.transform = "rotate(-20deg)";
-        document.getElementById("som-errado").play();
-    }
+    const diff = Math.floor((hoje - ultima) / (1000 * 60 * 60 * 24));
 
-    // Reset do mascote após 0.5s
-    setTimeout(() => {
-        mascoteEl.style.transform = "scale(1) rotate(0deg)";
-    }, 500);
+    return diff >= planta.dias;
 }
 
-proximaBtn.addEventListener("click", ()=>{
-    indice++;
-    if(indice < perguntas.length){
-        carregarPergunta();
-    } else{
-        document.getElementById("quiz").classList.add("oculto");
-        document.getElementById("resultado").classList.remove("oculto");
+function regar(index){
+    plantas[index].ultimaRegada = new Date().toISOString().split("T")[0];
+    salvar();
+    mostrarPlantas();
+}
 
-        let medalha = "🌱";
-        if(pontos === perguntas.length) medalha="🏆";
-        else if(pontos >= 3) medalha="🥇";
-        else if(pontos >= 2) medalha="🥈";
+function mostrarPlantas(){
+    const lista = document.getElementById("lista");
+    lista.innerHTML = "";
 
-        document.getElementById("pontuacao").innerHTML = `${medalha}<br><br>Você acertou ${pontos} de ${perguntas.length} perguntas!`;
-    }
-});
+    plantas.forEach((p, i) => {
+        const div = document.createElement("div");
+        div.classList.add("planta");
 
-carregarPergunta();
-const perguntas = [
-    { pergunta:"Qual prática ajuda a conservar o solo?",
-      respostas:["Desmatamento","Rotação de culturas","Queimadas"],
-      correta:1,
-      explicacao:"A rotação de culturas mantém os nutrientes do solo e reduz pragas."
-    },
-    { pergunta:"Qual fonte de energia é sustentável no campo?",
-      respostas:["Carvão","Diesel","Energia solar"],
-      correta:2,
-      explicacao:"A energia solar é limpa, renovável e não polui."
-    }
-];
+        if(precisaRegar(p)){
+            div.classList.add("alerta");
+        } else {
+            div.classList.add("ok");
+        }
 
-let indice = 0;
-let pontos = 0;
+        div.innerHTML = `
+            <div>
+                <strong>${p.nome}</strong><br>
+                Regar a cada ${p.dias} dias
+            </div>
+            <button onclick="regar(${i})">💧 Regar</button>
+        `;
 
-const perguntaEl = document.getElementById("pergunta");
-const respostasEl = document.getElementById("respostas");
-const explicacaoEl = document.getElementById("explicacao");
-const progressoEl = document.getElementById("progresso");
-const proximaBtn = document.getElementById("proxima");
-
-function carregarPergunta(){
-    respostasEl.innerHTML="";
-    explicacaoEl.textContent="";
-    perguntaEl.textContent = perguntas[indice].pergunta;
-
-    perguntas[indice].respostas.forEach((resp,i)=>{
-        const btn = document.createElement("button");
-        btn.textContent = resp;
-        btn.onclick = ()=> verificarResposta(i,btn);
-        respostasEl.appendChild(btn);
+        lista.appendChild(div);
     });
-
-    progressoEl.style.width = (indice / perguntas.length)*100 + "%";
 }
 
-function verificarResposta(escolha,btn){
-    const botoes = document.querySelectorAll("#respostas button");
-    botoes.forEach(b => b.disabled=true);
-
-    if(escolha === perguntas[indice].correta){
-        pontos++;
-        btn.style.background="green";
-    } else{
-        btn.style.background="red";
-        botoes[perguntas[indice].correta].style.background="green";
-    }
-
-    explicacaoEl.textContent = perguntas[indice].explicacao;
-}
-
-proximaBtn.onclick = ()=>{
-    indice++;
-    if(indice<perguntas.length){
-        carregarPergunta();
-    }else{
-        document.getElementById("quiz").classList.add("oculto");
-        document.getElementById("resultado").classList.remove("oculto");
-        document.getElementById("pontuacao").textContent = `Você acertou ${pontos} de ${perguntas.length} perguntas!`;
-    }
-}
-
-carregarPergunta();
+mostrarPlantas();

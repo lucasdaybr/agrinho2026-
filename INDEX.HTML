@@ -2,78 +2,29 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroQuiz Sustentável</title>
+    <title>PlantCare Agro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="container">
-    <h1>🌱 AgroQuiz Sustentável</h1>
+    <h1>🌱 PlantCare Agro</h1>
+    <p class="sub">Monitore suas plantas e cuide da sustentabilidade</p>
 
-    <!-- Barra de progresso -->
-    <div id="barra-progresso">
-        <div id="progresso"></div>
+    <!-- Formulário -->
+    <div class="card">
+        <input type="text" id="nomePlanta" placeholder="Nome da planta">
+        <input type="number" id="diasRegar" placeholder="Regar a cada quantos dias?">
+        <button onclick="adicionarPlanta()">Adicionar Planta</button>
     </div>
 
-    <!-- Mascote -->
-    <div id="mascote">
-        <img src="imagens/mascote.png" alt="Mascote Agro" id="imagem-mascote">
-    </div>
+    <!-- Lista -->
+    <h2>🌿 Suas Plantas</h2>
+    <div id="lista"></div>
 
-    <!-- Quiz -->
-    <div id="quiz">
-        <img id="imagem-pergunta" src="" alt="" class="oculto">
-        <h2 id="pergunta"></h2>
-        <div id="respostas"></div>
-        <p id="explicacao"></p>
-        <button id="proxima">Próxima Pergunta</button>
-    </div>
-
-    <!-- Resultado final -->
-    <div id="resultado" class="oculto">
-        <h2>Resultado Final</h2>
-        <p id="pontuacao"></p>
-        <button onclick="location.reload()">Jogar Novamente</button>
-    </div>
-</div>
-
-<!-- Sons -->
-<audio id="som-certo" src="sons/certo.mp3"></audio>
-<audio id="som-errado" src="sons/erro.mp3"></audio>
-
-<script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgroQuiz Sustentável</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-    <h1>🌱 AgroQuiz Sustentável</h1>
-
-    <!-- Barra de progresso -->
-    <div id="barra-progresso">
-        <div id="progresso"></div>
-    </div>
-
-    <!-- Quiz -->
-    <div id="quiz">
-        <h2 id="pergunta"></h2>
-        <div id="respostas"></div>
-        <p id="explicacao"></p>
-        <button id="proxima">Próxima Pergunta</button>
-    </div>
-
-    <!-- Resultado final -->
-    <div id="resultado" class="oculto">
-        <h2>Resultado Final</h2>
-        <p id="pontuacao"></p>
-        <button onclick="location.reload()">Jogar Novamente</button>
+    <!-- Dica -->
+    <div class="dica">
+        💡 Dica: Regar corretamente evita desperdício de água e melhora a produção sustentável!
     </div>
 </div>
 
