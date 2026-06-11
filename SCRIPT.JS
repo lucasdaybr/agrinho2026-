@@ -6,7 +6,8 @@ const perguntas = [
         "Rotação de culturas",
         "Queimadas"
     ],
-    correta: 1
+    correta: 1,
+    explicacao: "A rotação de culturas ajuda a manter os nutrientes do solo e reduz pragas."
 },
 {
     pergunta: "Qual fonte de energia é sustentável no campo?",
@@ -15,7 +16,8 @@ const perguntas = [
         "Diesel",
         "Energia solar"
     ],
-    correta: 2
+    correta: 2,
+    explicacao: "A energia solar é limpa, renovável e reduz a emissão de poluentes."
 },
 {
     pergunta: "Por que economizar água na agricultura é importante?",
@@ -24,7 +26,8 @@ const perguntas = [
         "Para gastar mais",
         "Não faz diferença"
     ],
-    correta: 0
+    correta: 0,
+    explicacao: "A água é um recurso essencial para a vida e deve ser usada de forma consciente."
 },
 {
     pergunta: "O que ajuda a proteger a biodiversidade?",
@@ -33,7 +36,8 @@ const perguntas = [
         "Preservação de áreas verdes",
         "Poluição dos rios"
     ],
-    correta: 1
+    correta: 1,
+    explicacao: "Áreas verdes preservadas ajudam a proteger plantas, animais e ecossistemas."
 }
 ];
 
@@ -44,8 +48,16 @@ const perguntaEl = document.getElementById("pergunta");
 const respostasEl = document.getElementById("respostas");
 const proximaBtn = document.getElementById("proxima");
 
+const explicacaoEl = document.createElement("p");
+explicacaoEl.style.marginTop = "15px";
+explicacaoEl.style.fontWeight = "bold";
+explicacaoEl.style.color = "#2E7D32";
+
+document.getElementById("quiz").appendChild(explicacaoEl);
+
 function carregarPergunta() {
     respostasEl.innerHTML = "";
+    explicacaoEl.textContent = "";
 
     perguntaEl.textContent = perguntas[indice].pergunta;
 
@@ -68,9 +80,14 @@ function verificarResposta(escolha) {
     if (escolha === perguntas[indice].correta) {
         pontos++;
         botoes[escolha].style.background = "#81C784";
+        explicacaoEl.textContent =
+            "✅ Correto! " + perguntas[indice].explicacao;
     } else {
         botoes[escolha].style.background = "#E57373";
         botoes[perguntas[indice].correta].style.background = "#81C784";
+
+        explicacaoEl.textContent =
+            "❌ Resposta incorreta. " + perguntas[indice].explicacao;
     }
 }
 
@@ -82,8 +99,19 @@ proximaBtn.addEventListener("click", () => {
     } else {
         document.getElementById("quiz").classList.add("oculto");
         document.getElementById("resultado").classList.remove("oculto");
-        document.getElementById("pontuacao").textContent =
-            `Você acertou ${pontos} de ${perguntas.length} perguntas!`;
+
+        let medalha = "🌱";
+
+        if (pontos === perguntas.length) {
+            medalha = "🏆";
+        } else if (pontos >= 3) {
+            medalha = "🥇";
+        } else if (pontos >= 2) {
+            medalha = "🥈";
+        }
+
+        document.getElementById("pontuacao").innerHTML =
+            `${medalha}<br><br>Você acertou ${pontos} de ${perguntas.length} perguntas!`;
     }
 });
 
