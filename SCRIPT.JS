@@ -84,4 +84,90 @@ function verificarResposta(escolha, botao){
     }
 
     // Reset do mascote após 0.5s
-    setTimeout(()=> mascoteEl.style.transform = "scale
+    setTimeout(() => {
+        mascoteEl.style.transform = "scale(1) rotate(0deg)";
+    }, 500);
+}
+
+proximaBtn.addEventListener("click", ()=>{
+    indice++;
+    if(indice < perguntas.length){
+        carregarPergunta();
+    } else{
+        document.getElementById("quiz").classList.add("oculto");
+        document.getElementById("resultado").classList.remove("oculto");
+
+        let medalha = "🌱";
+        if(pontos === perguntas.length) medalha="🏆";
+        else if(pontos >= 3) medalha="🥇";
+        else if(pontos >= 2) medalha="🥈";
+
+        document.getElementById("pontuacao").innerHTML = `${medalha}<br><br>Você acertou ${pontos} de ${perguntas.length} perguntas!`;
+    }
+});
+
+carregarPergunta();
+const perguntas = [
+    { pergunta:"Qual prática ajuda a conservar o solo?",
+      respostas:["Desmatamento","Rotação de culturas","Queimadas"],
+      correta:1,
+      explicacao:"A rotação de culturas mantém os nutrientes do solo e reduz pragas."
+    },
+    { pergunta:"Qual fonte de energia é sustentável no campo?",
+      respostas:["Carvão","Diesel","Energia solar"],
+      correta:2,
+      explicacao:"A energia solar é limpa, renovável e não polui."
+    }
+];
+
+let indice = 0;
+let pontos = 0;
+
+const perguntaEl = document.getElementById("pergunta");
+const respostasEl = document.getElementById("respostas");
+const explicacaoEl = document.getElementById("explicacao");
+const progressoEl = document.getElementById("progresso");
+const proximaBtn = document.getElementById("proxima");
+
+function carregarPergunta(){
+    respostasEl.innerHTML="";
+    explicacaoEl.textContent="";
+    perguntaEl.textContent = perguntas[indice].pergunta;
+
+    perguntas[indice].respostas.forEach((resp,i)=>{
+        const btn = document.createElement("button");
+        btn.textContent = resp;
+        btn.onclick = ()=> verificarResposta(i,btn);
+        respostasEl.appendChild(btn);
+    });
+
+    progressoEl.style.width = (indice / perguntas.length)*100 + "%";
+}
+
+function verificarResposta(escolha,btn){
+    const botoes = document.querySelectorAll("#respostas button");
+    botoes.forEach(b => b.disabled=true);
+
+    if(escolha === perguntas[indice].correta){
+        pontos++;
+        btn.style.background="green";
+    } else{
+        btn.style.background="red";
+        botoes[perguntas[indice].correta].style.background="green";
+    }
+
+    explicacaoEl.textContent = perguntas[indice].explicacao;
+}
+
+proximaBtn.onclick = ()=>{
+    indice++;
+    if(indice<perguntas.length){
+        carregarPergunta();
+    }else{
+        document.getElementById("quiz").classList.add("oculto");
+        document.getElementById("resultado").classList.remove("oculto");
+        document.getElementById("pontuacao").textContent = `Você acertou ${pontos} de ${perguntas.length} perguntas!`;
+    }
+}
+
+carregarPergunta();

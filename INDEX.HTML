@@ -44,3 +44,39 @@
 <script src="script.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroQuiz Sustentável</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h1>🌱 AgroQuiz Sustentável</h1>
+
+    <!-- Barra de progresso -->
+    <div id="barra-progresso">
+        <div id="progresso"></div>
+    </div>
+
+    <!-- Quiz -->
+    <div id="quiz">
+        <h2 id="pergunta"></h2>
+        <div id="respostas"></div>
+        <p id="explicacao"></p>
+        <button id="proxima">Próxima Pergunta</button>
+    </div>
+
+    <!-- Resultado final -->
+    <div id="resultado" class="oculto">
+        <h2>Resultado Final</h2>
+        <p id="pontuacao"></p>
+        <button onclick="location.reload()">Jogar Novamente</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
