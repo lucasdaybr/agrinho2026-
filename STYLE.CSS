@@ -2,7 +2,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 body{
@@ -21,6 +21,7 @@ body{
     border-radius:15px;
     box-shadow:0 0 15px rgba(0,0,0,0.2);
     text-align:center;
+    position: relative;
 }
 
 h1{
@@ -48,10 +49,34 @@ button{
 
 .resposta{
     background:#E8F5E9;
+    transition: transform 0.2s;
 }
 
 .resposta:hover{
     background:#C8E6C9;
+    transform: scale(1.05);
+}
+
+@keyframes acerto {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes erro {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.resposta.acerto {
+    animation: acerto 0.5s ease;
+}
+
+.resposta.erro {
+    animation: erro 0.5s ease;
 }
 
 #proxima{
@@ -66,4 +91,48 @@ button{
 
 .oculto{
     display:none;
+}
+
+#barra-progresso {
+    width: 100%;
+    height: 20px;
+    background: #E0E0E0;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+#progresso {
+    width: 0%;
+    height: 100%;
+    background: #4CAF50;
+    border-radius: 10px;
+    transition: width 0.5s;
+}
+
+#explicacao{
+    margin-top:15px;
+    font-weight:bold;
+    color:#2E7D32;
+}
+
+#imagem-pergunta{
+    max-width:100%;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+#mascote{
+    position:absolute;
+    top:-80px;
+    right:10px;
+    width:60px;
+    height:60px;
+}
+#imagem-mascote{
+    width:100%;
+    animation: bounce 1s infinite alternate;
+}
+@keyframes bounce{
+    0%{transform: translateY(0);}
+    100%{transform: translateY(-10px);}
 }

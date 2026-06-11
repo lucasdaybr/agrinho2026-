@@ -7,18 +7,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="container">
     <h1>🌱 AgroQuiz Sustentável</h1>
 
+    <!-- Barra de progresso -->
+    <div id="barra-progresso">
+        <div id="progresso"></div>
+    </div>
+
+    <!-- Mascote -->
+    <div id="mascote">
+        <img src="imagens/mascote.png" alt="Mascote Agro" id="imagem-mascote">
+    </div>
+
+    <!-- Quiz -->
     <div id="quiz">
+        <img id="imagem-pergunta" src="" alt="" class="oculto">
         <h2 id="pergunta"></h2>
-
         <div id="respostas"></div>
-
+        <p id="explicacao"></p>
         <button id="proxima">Próxima Pergunta</button>
     </div>
 
+    <!-- Resultado final -->
     <div id="resultado" class="oculto">
         <h2>Resultado Final</h2>
         <p id="pontuacao"></p>
@@ -26,7 +37,10 @@
     </div>
 </div>
 
-<script src="script.js"></script>
+<!-- Sons -->
+<audio id="som-certo" src="sons/certo.mp3"></audio>
+<audio id="som-errado" src="sons/erro.mp3"></audio>
 
+<script src="script.js"></script>
 </body>
 </html>
